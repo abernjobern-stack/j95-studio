@@ -14,8 +14,26 @@ with t1:
     with st.form("booking_form"):
         nm = st.text_input("Artist Name")
         dt = st.date_input("Date", min_value=date.today())
-        tm = st.time_input("Start Time", value=time(14, 0))
-        hr = st.number_input("Duration (Hours)", min_value=2, max_value=12, value=2)
+
+        # Defined Time Slots (12 PM to 6 PM)
+        available_slots = [
+            "12:00 PM - 2:00 PM (Quick Session)", 
+            "2:00 PM - 5:00 PM (Standard Session)", 
+            "12:00 PM - 6:00 PM (Full Day)"
+        ]
+
+        slot_choice = st.selectbox("Choose an available slot", options=available_slots)
+
+        # Assign logic based on selection
+        if "Quick" in slot_choice:
+            hr = 2
+            tm = time(12, 0)
+        elif "Standard" in slot_choice:
+            hr = 3
+            tm = time(14, 0)
+        else:
+            hr = 6
+            tm = time(12, 0)
 
         # Logic for Session Timing
         start = datetime.combine(dt, tm)
@@ -24,6 +42,7 @@ with t1:
         # Logic for Pricing (Urgent = < 72 hours notice)
         urg = (start - datetime.now()).total_seconds() / 3600 < 72
         base_rate = 120 if urg else 100
+        # Extra hours cost ($10/hr after the first 2 hours)
         extra_hours_cost = max(0, hr - 2) * 10
         total_cost = base_rate + extra_hours_cost
         deposit = total_cost * 0.5
@@ -38,13 +57,13 @@ with t1:
             st.success(f"Request sent for {nm}! Please proceed to the Deposit tab.")
 
 with t2:
-    st.subheader("Deposit & Verification")
+    st.subheader("2. Deposit & Verification")
     st.markdown("""
     To secure your slot, please transfer the 50% deposit to the following account:
     
     * **Bank:** Commonwealth Bank
     * **Acc Name:** Amuson Bernicke
-    * **BSB:** 064-036 
+    * **BSB:** 064-036
     * **Acc #:** 1001 2283
     
     *Note: Cash payments are also accepted in person.*
