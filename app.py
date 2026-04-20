@@ -48,7 +48,7 @@ with t2:
     * **Acc #:** 1001 2283
     
     *Note: Cash payments are also accepted in person.*"""
-    \"\"\")
+    """)
     
     st.divider()
     
