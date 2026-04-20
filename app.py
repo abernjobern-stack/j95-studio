@@ -47,7 +47,7 @@ with t2:
     * **BSB:** 064-036 
     * **Acc #:** 1001 2283
     
-    *Note: Cash payments are also accepted in person.*
+    *Note: Cash payments are also accepted in person.*"""
     \"\"\")
     
     st.divider()
