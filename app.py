@@ -79,7 +79,7 @@ with t2:
     * **INSTITUTION:** Commonwealth Bank
     * **ID:** Amuson Bernicke
     * **BSB:** 064-036
-    * **ACC_NUMBER:** 1001 2283
+    * **ACC_NUMBER:** XXXX XXXX
     
     *Physical credit exchange accepted at terminal.*
     """)
