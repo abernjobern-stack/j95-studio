@@ -11,7 +11,7 @@ DEPOSIT_PERCENTAGE = 0.50
 # --- BANK DETAILS ---
 BANK_NAME = "Commonwealth Bank (Nauru)"
 ACCOUNT_NAME = "Amuson Bernicke"
-BSB_NUMBER = "064-036"  
+BSB_NUMBER = "064-063"  
 ACCOUNT_NUMBER = "1001 2283" 
 
 st.set_page_config(page_title="Generis Production | J95", page_icon="🎙️")
