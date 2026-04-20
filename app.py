@@ -27,7 +27,7 @@ with t1:
 
 {start.strftime('%I:%M %p')} - {end.strftime('%I:%M %p')}
 ", unsafe_allow_html=True)
-        st.markdown(f"
+        st.markdown(f"""
 
 Deposit: ${cost * 0.5}
 Total: ${cost}
