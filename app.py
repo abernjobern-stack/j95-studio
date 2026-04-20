@@ -1,4 +1,4 @@
-streamlit as st
+import streamlit as st
 from datetime import datetime, date, timedelta, time
 
 # --- STUDIO SETTINGS ---
