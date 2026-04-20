@@ -39,7 +39,7 @@ with t1:
 
 with t2:
     st.subheader("Deposit & Verification")
-    st.markdown(\"\"\"
+    st.markdown("""
     To secure your slot, please transfer the 50% deposit to the following account:
     
     * **Bank:** Commonwealth Bank
