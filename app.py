@@ -28,8 +28,6 @@ with tab1:
         end_dt = start_dt + timedelta(hours=duration)
         is_urgent = (start_dt - datetime.now()).total_seconds() / 3600 < 72
         total_cost = (120 if is_urgent else 100) + (max(0, duration - 2) * 10)
-        
-        st.markdown(f"
 
 Window: {start_dt.strftime('%I:%M %p')} — {end_dt.strftime('%I:%M %p')}
 ", unsafe_allow_html=True)
