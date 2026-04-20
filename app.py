@@ -1,53 +1,58 @@
 import streamlit as st
 from datetime import datetime, date, time, timedelta
 
-# Set up page config for a professional look
+# Set up page config
 st.set_page_config(page_title="J95 Studio Booking", page_icon="🎙️")
 
 st.title("🎙️ J95-Studio Booking Portal")
 st.write("Lead Engineer: Amuson Bernicke")
 
-# Create Tabs for a cleaner mobile UI
 t1, t2 = st.tabs(["1. Book Session", "2. Payment & Deposit"])
 
 with t1:
     with st.form("booking_form"):
         nm = st.text_input("Artist Name")
-        dt = st.date_input("Date", min_value=date.today())
+        
+        # Calendar booking in Day/Month/Year format
+        dt = st.date_input("Date", min_value=date.today(), format="DD/MM/YYYY")
 
-        # Defined Time Slots (12 PM to 6 PM)
-        available_slots = [
-            "12:00 PM - 2:00 PM (Quick Session)", 
-            "2:00 PM - 5:00 PM (Standard Session)", 
-            "12:00 PM - 6:00 PM (Full Day)"
+        # Define 2 Sessions per day
+        session_options = [
+            "Afternoon Session (12:00 PM - 3:00 PM)", 
+            "Evening Session (3:00 PM - 6:00 PM)"
         ]
 
-        slot_choice = st.selectbox("Choose an available slot", options=available_slots)
+        selected_session = st.selectbox("Select Session Slot", options=session_options)
 
-        # Assign logic based on selection
-        if "Quick" in slot_choice:
-            hr = 2
+        # Logic for Session Times and Duration (Both are 3 hours)
+        hr = 3
+        if "Afternoon" in selected_session:
             tm = time(12, 0)
-        elif "Standard" in slot_choice:
-            hr = 3
-            tm = time(14, 0)
         else:
-            hr = 6
-            tm = time(12, 0)
+            tm = time(15, 0)
 
-        # Logic for Session Timing
+        # Logic for Session Timing calculation
         start = datetime.combine(dt, tm)
         end = start + timedelta(hours=hr)
         
-        # Logic for Pricing (Urgent = < 72 hours notice)
-        urg = (start - datetime.now()).total_seconds() / 3600 < 72
-        base_rate = 120 if urg else 100
+        # Pricing Logic
+        days_ahead = (start - datetime.now()).days
+        hours_ahead = (start - datetime.now()).total_seconds() / 3600
+        
+        if days_ahead >= 4:
+            base_rate = 100
+        elif hours_ahead < 72:
+            base_rate = 120
+        else:
+            base_rate = 100
+
         # Extra hours cost ($10/hr after the first 2 hours)
         extra_hours_cost = max(0, hr - 2) * 10
         total_cost = base_rate + extra_hours_cost
         deposit = total_cost * 0.5
 
-        st.info(f"Booking: {start.strftime('%I:%M %p')} to {end.strftime('%I:%M %p')}")
+        # Displaying the formatted date to the user
+        st.info(f"Booking for {dt.strftime('%d/%m/%Y')}: {start.strftime('%I:%M %p')} to {end.strftime('%I:%M %p')}")
         
         st.write(f"**Total Price:** ${total_cost:.2f}")
         st.write(f"**Required Deposit (50%):** ${deposit:.2f}")
@@ -64,7 +69,7 @@ with t2:
     * **Bank:** Commonwealth Bank
     * **Acc Name:** Amuson Bernicke
     * **BSB:** 064-036
-    * **Acc #:** 1001 2283
+    * **Acc #:** XXXX XXXX
     
     *Note: Cash payments are also accepted in person.*
     """)
