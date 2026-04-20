@@ -16,17 +16,29 @@ with t1:
         # Calendar booking in Day/Month/Year format
         dt = st.date_input("Date", min_value=date.today(), format="DD/MM/YYYY")
 
-        # Define 2 Sessions per day
+        # You choose the session lengths available to them
         session_options = [
-            "Afternoon Session (12:00 PM - 3:00 PM)", 
-            "Evening Session (3:00 PM - 6:00 PM)"
+            "2 Hour Quick Session",
+            "3 Hour Standard Session",
+            "6 Hour Full Day"
         ]
+        
+        selected_type = st.selectbox("Select Session Type", options=session_options)
 
-        selected_session = st.selectbox("Select Session Slot", options=session_options)
+        # Start Time Selection
+        start_options = ["12:00 PM", "3:00 PM"]
+        selected_start = st.selectbox("Select Start Time", options=start_options)
 
-        # Logic for Session Times and Duration (Both are 3 hours)
-        hr = 3
-        if "Afternoon" in selected_session:
+        # Set duration (hr) based on your chosen session types
+        if "2 Hour" in selected_type:
+            hr = 2
+        elif "3 Hour" in selected_type:
+            hr = 3
+        else:
+            hr = 6
+
+        # Convert start time selection to time object
+        if "12:00" in selected_start:
             tm = time(12, 0)
         else:
             tm = time(15, 0)
@@ -39,6 +51,7 @@ with t1:
         days_ahead = (start - datetime.now()).days
         hours_ahead = (start - datetime.now()).total_seconds() / 3600
         
+        # Base rate: $100 unless it is urgent (less than 72 hours and not 4+ days ahead)
         if days_ahead >= 4:
             base_rate = 100
         elif hours_ahead < 72:
@@ -51,7 +64,7 @@ with t1:
         total_cost = base_rate + extra_hours_cost
         deposit = total_cost * 0.5
 
-        # Displaying the formatted date to the user
+        # Displaying the formatted date and session info
         st.info(f"Booking for {dt.strftime('%d/%m/%Y')}: {start.strftime('%I:%M %p')} to {end.strftime('%I:%M %p')}")
         
         st.write(f"**Total Price:** ${total_cost:.2f}")
