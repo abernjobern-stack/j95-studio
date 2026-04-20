@@ -69,7 +69,7 @@ with t2:
     * **Bank:** Commonwealth Bank
     * **Acc Name:** Amuson Bernicke
     * **BSB:** 064-036
-    * **Acc #:** XXXX XXXX
+    * **Acc #:** 1001 2283
     
     *Note: Cash payments are also accepted in person.*
     """)
