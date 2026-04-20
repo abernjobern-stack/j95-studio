@@ -23,7 +23,7 @@ with t1:
         end = start + timedelta(hours=hr)
         urg = (start - datetime.now()).total_seconds() / 3600 < 72
         cost = (120 if urg else 100) + (max(0, hr - 2) * 10)
-        st.markdown(f"
+        st.markdown(f")
 
 {start.strftime('%I:%M %p')} - {end.strftime('%I:%M %p')}
 ", unsafe_allow_html=True)
