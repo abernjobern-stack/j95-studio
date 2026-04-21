@@ -17,7 +17,7 @@ st.markdown("""
 J95 GENERIS PRODUCTION
 
         
-// PORTAL_v15.0
+// PORTAL_v16.0
 
     
 
@@ -26,7 +26,6 @@ J95 GENERIS PRODUCTION
 t1, t2, t3 = st.tabs(["[ 01_BOOK_SESSION ]", "[ 02_DEPOSIT_LINK ]", "[ 03_TERMINATE_LINK ]"])
 
 with t1:
-    # MOVE UPLOADER OUTSIDE THE FORM for instant feedback
     st.write("### 🎵 1. UPLOAD REFERENCE")
     ref_song = st.file_uploader("Select MP3/WAV (Max 200MB)", type=['mp3', 'wav', 'm4a'])
     
@@ -52,15 +51,21 @@ with t1:
 
         ref_notes = st.text_area("SESSION_NOTES (VIBE, MIXING STYLE, ETC.)")
 
-        # Logic for Session Timing & Pricing
+        # Logic for Session Timing
         hr = 2 if "2 Hour" in selected_type else 3 if "3 Hour" in selected_type else 6
         tm = time(12, 0) if "12:00" in selected_start else time(15, 0)
         start = datetime.combine(dt, tm)
         end = start + timedelta(hours=hr)
         
-        days_ahead = (start - datetime.now()).days
+        # PRICING LOGIC: $100 for more than 3 days, $120 for urgent
         hours_ahead = (start - datetime.now()).total_seconds() / 3600
-        base_rate = 100 if (days_ahead >= 4 or hours_ahead >= 72) else 120
+        
+        if hours_ahead > 72:
+            base_rate = 100
+        else:
+            base_rate = 120
+
+        # Extra hours cost ($10/hr after the first 2 hours)
         total_cost = base_rate + (max(0, hr - 2) * 10)
         deposit = total_cost * 0.5
 
