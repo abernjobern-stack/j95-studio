@@ -17,7 +17,7 @@ st.markdown("""
 J95 GENERIS PRODUCTION
 
         
-// PORTAL_v14.0
+// PORTAL_v15.0
 
     
 
@@ -26,6 +26,15 @@ J95 GENERIS PRODUCTION
 t1, t2, t3 = st.tabs(["[ 01_BOOK_SESSION ]", "[ 02_DEPOSIT_LINK ]", "[ 03_TERMINATE_LINK ]"])
 
 with t1:
+    # MOVE UPLOADER OUTSIDE THE FORM for instant feedback
+    st.write("### 🎵 1. UPLOAD REFERENCE")
+    ref_song = st.file_uploader("Select MP3/WAV (Max 200MB)", type=['mp3', 'wav', 'm4a'])
+    
+    if ref_song:
+        st.success(f"FILE_LOADED: {ref_song.name}")
+
+    st.write("---")
+    st.write("### 📅 2. SESSION DETAILS")
     with st.form("booking_form"):
         c1, c2 = st.columns(2)
         with c1:
@@ -41,19 +50,14 @@ with t1:
             start_options = ["12:00 PM", "3:00 PM"]
             selected_start = st.selectbox("TIMELINE_START", options=start_options)
 
-        st.write("---")
-        st.write("### 🎵 REFERENCE_MATERIAL")
-        ref_song = st.file_uploader("UPLOAD_REFERENCE_TRACK (MP3, WAV, M4A)", type=['mp3', 'wav', 'm4a'])
-        ref_notes = st.text_area("SESSION_NOTES (E.G. VIBE, MIXING STYLE)")
+        ref_notes = st.text_area("SESSION_NOTES (VIBE, MIXING STYLE, ETC.)")
 
-        # Duration Logic
+        # Logic for Session Timing & Pricing
         hr = 2 if "2 Hour" in selected_type else 3 if "3 Hour" in selected_type else 6
         tm = time(12, 0) if "12:00" in selected_start else time(15, 0)
-
         start = datetime.combine(dt, tm)
         end = start + timedelta(hours=hr)
         
-        # Pricing Logic
         days_ahead = (start - datetime.now()).days
         hours_ahead = (start - datetime.now()).total_seconds() / 3600
         base_rate = 100 if (days_ahead >= 4 or hours_ahead >= 72) else 120
@@ -72,7 +76,10 @@ with t1:
 
         submit = st.form_submit_button("INITIALIZE_RESERVATION")
         if submit:
-            st.success(f"DATA_LINK_ESTABLISHED: {nm}. Reference received. Proceed to Deposit.")
+            if not nm:
+                st.error("ERROR: ARTIST_ID REQUIRED")
+            else:
+                st.success(f"DATA_LINK_ESTABLISHED: {nm}. Proceed to Deposit.")
 
 with t2:
     st.subheader("NETWORK_PAYMENT_GATEWAY")
@@ -80,7 +87,7 @@ with t2:
     st.write("**INSTITUTION:** Commonwealth Bank")
     st.write("**ID:** Amuson Bernicke")
     st.write("**BSB:** 064-036")
-    st.write("**ACC_NUMBER:** 1001 2283")
+    st.write("**ACC_NUMBER:** XXXX XXXX")
     st.divider()
     receipt = st.file_uploader("UPLOAD_TX_RECEIPT", type=['jpg', 'png', 'pdf'])
 
