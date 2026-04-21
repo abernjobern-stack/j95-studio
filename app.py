@@ -4,7 +4,7 @@ from datetime import datetime, date, time, timedelta
 # Set up page config
 st.set_page_config(page_title="J95 GENERIS PRODUCTION", page_icon="🎙️", layout="centered")
 
-# --- CLEAN CYBERPUNK CSS (NO NEON) ---
+# --- CLEAN CYBERPUNK CSS ---
 st.markdown("""
 
 """, unsafe_allow_html=True)
@@ -17,7 +17,7 @@ st.markdown("""
 J95 GENERIS PRODUCTION
 
         
-// PORTAL_v11.0
+// PORTAL_v14.0
 
     
 
@@ -40,6 +40,11 @@ with t1:
         with c4:
             start_options = ["12:00 PM", "3:00 PM"]
             selected_start = st.selectbox("TIMELINE_START", options=start_options)
+
+        st.write("---")
+        st.write("### 🎵 REFERENCE_MATERIAL")
+        ref_song = st.file_uploader("UPLOAD_REFERENCE_TRACK (MP3, WAV, M4A)", type=['mp3', 'wav', 'm4a'])
+        ref_notes = st.text_area("SESSION_NOTES (E.G. VIBE, MIXING STYLE)")
 
         # Duration Logic
         hr = 2 if "2 Hour" in selected_type else 3 if "3 Hour" in selected_type else 6
@@ -67,7 +72,7 @@ with t1:
 
         submit = st.form_submit_button("INITIALIZE_RESERVATION")
         if submit:
-            st.success(f"DATA_LINK_ESTABLISHED: {nm}. Proceed to Deposit.")
+            st.success(f"DATA_LINK_ESTABLISHED: {nm}. Reference received. Proceed to Deposit.")
 
 with t2:
     st.subheader("NETWORK_PAYMENT_GATEWAY")
@@ -81,13 +86,10 @@ with t2:
 
 with t3:
     st.subheader("❌ TERMINATE_RESERVATION")
-    st.write("To cancel a session, enter your ID and Date. Note: Deposits are non-refundable within 48 hours of session.")
-    
     with st.form("cancel_form"):
         cancel_nm = st.text_input("ENTER_ARTIST_ID")
         cancel_dt = st.date_input("SELECT_SESSION_DATE", format="DD/MM/YYYY")
         reason = st.text_area("REASON_FOR_TERMINATION")
-        
         cancel_submit = st.form_submit_button("CONFIRM_TERMINATION")
         if cancel_submit:
-            st.warning(f"TERMINATION_REQUEST_SENT: Our system operator will review the cancellation for {cancel_nm} on {cancel_dt.strftime('%d/%m/%Y')}.")
+            st.warning(f"TERMINATION_REQUEST_SENT: Our system operator will review the cancellation.")
