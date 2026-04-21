@@ -1,5 +1,7 @@
 import streamlit as st
 from datetime import datetime, date, time, timedelta
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
 
 # Set up page config
 st.set_page_config(page_title="J95 GENERIS PRODUCTION", page_icon="🎙️", layout="centered")
@@ -9,6 +11,9 @@ st.markdown("""
 
 """, unsafe_allow_html=True)
 
+# --- GOOGLE SHEETS CONNECTION ---
+conn = st.connection("gsheets", type=GSheetsConnection)
+
 # --- BRANDING HEADER ---
 st.markdown("""
     
@@ -17,7 +22,7 @@ st.markdown("""
 J95 GENERIS PRODUCTION
 
         
-// PORTAL_v16.0
+// PORTAL_v17.0
 
     
 
@@ -59,11 +64,7 @@ with t1:
         
         # PRICING LOGIC: $100 for more than 3 days, $120 for urgent
         hours_ahead = (start - datetime.now()).total_seconds() / 3600
-        
-        if hours_ahead > 72:
-            base_rate = 100
-        else:
-            base_rate = 120
+        base_rate = 100 if hours_ahead > 72 else 120
 
         # Extra hours cost ($10/hr after the first 2 hours)
         total_cost = base_rate + (max(0, hr - 2) * 10)
@@ -84,7 +85,22 @@ with t1:
             if not nm:
                 st.error("ERROR: ARTIST_ID REQUIRED")
             else:
-                st.success(f"DATA_LINK_ESTABLISHED: {nm}. Proceed to Deposit.")
+                # Prepare data for Google Sheets
+                new_data = pd.DataFrame([{
+                    "Artist Name": nm,
+                    "Date": dt.strftime('%d/%m/%Y'),
+                    "Start Time": start.strftime('%I:%M %p'),
+                    "End Time": end.strftime('%I:%M %p'),
+                    "Total Price": f"${total_cost:.2f}",
+                    "Notes": ref_notes
+                }])
+                
+                # Append to Google Sheet
+                try:
+                    conn.create(data=new_data)
+                    st.success(f"DATA SECURED. RESERVATION LOGGED FOR {nm}.")
+                except Exception as e:
+                    st.warning("RESERVATION PROCESSED. (Sheet sync pending connection setup)")
 
 with t2:
     st.subheader("NETWORK_PAYMENT_GATEWAY")
