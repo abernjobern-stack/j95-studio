@@ -80,7 +80,7 @@ with t2:
     st.write("**INSTITUTION:** Commonwealth Bank")
     st.write("**ID:** Amuson Bernicke")
     st.write("**BSB:** 064-036")
-    st.write("**ACC_NUMBER:** XXXX XXXX")
+    st.write("**ACC_NUMBER:** 1001 2283")
     st.divider()
     receipt = st.file_uploader("UPLOAD_TX_RECEIPT", type=['jpg', 'png', 'pdf'])
 
