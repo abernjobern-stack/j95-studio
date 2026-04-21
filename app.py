@@ -2,15 +2,26 @@ import streamlit as st
 from datetime import datetime, date, time, timedelta
 
 # Set up page config
-st.set_page_config(page_title="J95 STUDIO // CYBERPUNK", page_icon="🎙️", layout="centered")
+st.set_page_config(page_title="J95 GENERIS PRODUCTION", page_icon="🎙️", layout="centered")
 
-# --- CYBERPUNK CSS ---
+# --- CLEAN CYBERPUNK CSS (NO NEON) ---
 st.markdown("""
 
 """, unsafe_allow_html=True)
 
-st.title("⚡ J95-STUDIO // NEON_PORTAL")
-st.write("SYSTEM_OPERATOR: Amuson Bernicke")
+# --- BRANDING HEADER ---
+st.markdown("""
+    
+
+        
+J95 GENERIS PRODUCTION
+
+        
+// PORTAL_v11.0
+
+    
+
+""", unsafe_allow_html=True)
 
 t1, t2, t3 = st.tabs(["[ 01_BOOK_SESSION ]", "[ 02_DEPOSIT_LINK ]", "[ 03_TERMINATE_LINK ]"])
 
